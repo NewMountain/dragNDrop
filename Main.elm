@@ -17,14 +17,24 @@ type alias Size =
 
 type Frame
     = SingleImage { url : String }
+    | HorizontalSplit
+        { top : Frame
+        , topHeight : Int
+        , bottom : Frame
+        }
 
 
 initialModel : Model
 initialModel =
-    { canvas = { width = 100, height = 100 }
+    { canvas = { width = 250, height = 250 }
     , frame =
-        SingleImage
-            { url = "https://pixabay.com/static/uploads/photo/2014/12/22/19/59/macbook-577758_960_720.jpg"
+        -- SingleImage
+        --     { url = "https://pixabay.com/static/uploads/photo/2014/12/22/19/59/macbook-577758_960_720.jpg"
+        --     }
+        HorizontalSplit
+            { top = SingleImage { url = "https://pixabay.com/static/uploads/photo/2014/12/22/19/59/macbook-577758_960_720.jpg" }
+            , topHeight = 80
+            , bottom = SingleImage { url = "https://pixabay.com/static/uploads/photo/2014/05/02/21/49/home-office-336373_960_720.jpg" }
             }
     }
 
@@ -75,6 +85,21 @@ viewFrame size frame =
                     ]
                 ]
                 []
+
+        HorizontalSplit { top, topHeight, bottom } ->
+            div
+                []
+                [ viewFrame
+                    { width = size.width
+                    , height = topHeight
+                    }
+                    top
+                , viewFrame
+                    { width = size.width
+                    , height = topHeight
+                    }
+                    bottom
+                ]
 
 
 main : Program Never
