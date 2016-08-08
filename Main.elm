@@ -6,11 +6,27 @@ import Html.App as App
 
 
 type alias Model =
-    {}
+    { canvas : Size
+    , frame : Frame
+    }
 
 
+type alias Size =
+    { width : Int, height : Int }
+
+
+type Frame
+    = SingleImage { url : String }
+
+
+initialModel : Model
 initialModel =
-    {}
+    { canvas = { width = 100, height = 100 }
+    , frame =
+        SingleImage
+            { url = "https://pixabay.com/static/uploads/photo/2014/12/22/19/59/macbook-577758_960_720.jpg"
+            }
+    }
 
 
 type Msg
@@ -27,32 +43,41 @@ view model =
     div
         [ style [ ( "padding", "8px" ) ]
         ]
-        [ viewCanvas
+        [ viewCanvas model.canvas model.frame
         , hr [] []
         , text <| toString model
         ]
 
 
-viewCanvas : Html Msg
-viewCanvas =
+viewCanvas : Size -> Frame -> Html Msg
+viewCanvas size rootFrame =
     div
         [ style
-            [ ( "width", "250px" )
-            , ( "height", "250px" )
+            [ ( "width", toString size.width ++ "px" )
+            , ( "height", toString size.height ++ "px" )
             , ( "border", "2px solid black" )
             ]
         ]
-        [ div
-            [ style
-                [ ( "height", "250px" )
-                , ( "background-image", "url(https://pixabay.com/static/uploads/photo/2016/06/16/14/45/leaf-1461418_960_720.jpg)" )
-                , ( "background-size", "auto 250px" )
-                ]
-            ]
-            []
+        [ viewFrame size rootFrame
         ]
 
 
+viewFrame : Size -> Frame -> Html Msg
+viewFrame size frame =
+    case frame of
+        SingleImage { url } ->
+            div
+                [ style
+                    [ ( "height", toString size.height ++ "px" )
+                    , ( "width", toString size.width ++ "px" )
+                    , ( "background-image", "url(" ++ url ++ ")" )
+                    , ( "background-size", "auto " ++ toString size.height ++ "px" )
+                    ]
+                ]
+                []
+
+
+main : Program Never
 main =
     App.program
         { init = ( initialModel, Cmd.none )
