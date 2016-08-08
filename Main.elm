@@ -42,7 +42,15 @@ viewCanvas =
             , ( "border", "2px solid black" )
             ]
         ]
-        [ img [ src "https://pixabay.com/static/uploads/photo/2016/06/16/14/45/leaf-1461418_960_720.jpg" ] [] ]
+        [ div
+            [ style
+                [ ( "height", "250px" )
+                , ( "background-image", "url(https://pixabay.com/static/uploads/photo/2016/06/16/14/45/leaf-1461418_960_720.jpg)" )
+                , ( "background-size", "auto 250px" )
+                ]
+            ]
+            []
+        ]
 
 
 main =
